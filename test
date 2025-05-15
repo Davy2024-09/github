@@ -1,0 +1,31 @@
+import random
+import string
+import tkinter as tk
+
+def generate_password():
+    length = int(entry_length.get())  # Récupérer la longueur du mot de passe
+    characters = string.ascii_letters + string.digits  # Sans symboles pour plus de lisibilité
+    global password
+    password = ''.join(random.choice(characters) for _ in range(length))  # Générer le mot de passe
+    label_result.config(text="")  # Effacer le texte actuel
+    reveal_password(0)  # Commencer l'affichage progressif
+
+def reveal_password(index):
+    if index < len(password):  
+        label_result.config(text=label_result.cget("text") + password[index])  # Ajouter une lettre
+        label_result.after(100, reveal_password, index + 1)  # Pause de 100 ms avant d'afficher la suivante
+
+# Interface Tkinter
+root = tk.Tk()
+root.title("Générateur de mots de passe")
+root.geometry("350x200")
+
+tk.Label(root, text="Longueur du mot de passe :").pack()
+entry_length = tk.Entry(root)
+entry_length.pack()
+
+tk.Button(root, text="Générer", command=generate_password).pack()
+label_result = tk.Label(root, text="", font=("Courier", 14))  # Police type machine à écrire
+label_result.pack()
+
+root.mainloop()
